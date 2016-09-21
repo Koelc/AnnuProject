@@ -1,0 +1,6 @@
+a = load '/user/hive/warehouse/final_census/000000_0' using PigStorage(',') as (age: int, edu:chararray,ms,gen:chararray,tf,income,parent,cob,c,ww);
+b = foreach a generate TRIM(edu) as ed, age;
+c = filter b by age>=18 and age <=25;
+d = group c by ed;
+e = foreach d generate group, COUNT(c.age);
+dump e;

@@ -1,0 +1,9 @@
+create table raw_census_data(jsondata string) row format delimited stored as textfile;
+
+load data local inpath 'Desktop/sample.dat' into table raw_census_data;
+
+create table final_census(age int, edu string,mar string, gen string, tax string , income string, parent string, cntry string, citizen string, ww string) row format delimited fields terminated by ',' stored as textfile;
+
+insert overwrite table final_census select get_json_object(jsondata,"$.Age"), get_json_object(jsondata,"$.Education"), get_json_object(jsondata,"$.MaritalStatus"), get_json_object(jsondata,"$.Gender"), get_json_object(jsondata,"$.TaxFilerStatus"), get_json_object(jsondata,"$.Income"), get_json_object(jsondata,"$.Parents"), get_json_object(jsondata,"$.CountryOfBirth"), get_json_object(jsondata,"$.Citizenship"), get_json_object(jsondata,"$.WeeksWorked") from raw_census_data;
+
+/user/hive/warehouse/final_census/000000_0

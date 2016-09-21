@@ -1,0 +1,12 @@
+a = load '/user/hive/warehouse/final_census/000000_0' using PigStorage(',') as (age, edu:chararray,ms,gen:chararray,tf,income,parent,cob,c,ww);
+b = foreach a generate TRIM(edu) as ed, TRIM(gen) as g;
+c = filter b by g=='Female';
+d = group c by ed;
+e = foreach d generate group, COUNT(c.g);
+z= foreach e generate $0,$1,'Female' as f;
+dump z;
+f = filter b by g=='Male';
+g = group f by ed;
+h = foreach g generate group, COUNT(f.g);
+y= foreach h generate $0,$1,'Male' as m;
+dump h;
